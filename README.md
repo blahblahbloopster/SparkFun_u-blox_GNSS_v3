@@ -226,6 +226,10 @@ For most generation 8 modules, please use [version 2 of this library](https://gi
 
 For generation 6 and 7, please see [this example (deprecated)](https://github.com/sparkfun/SparkFun_Ublox_Arduino_Library/tree/master/examples/Series_6_7/Example1_GetPositionAndTime_Series_6_7).
 
+## Memory Usage
+
+This library is heavy on both program memory and RAM. You are unlikely to be able to use it successfully on platforms with very limited memory, like the original Arduino Uno (ATmega328P). On other platforms with limited program memory, it may help to uncomment ```#define SFE_UBLOX_REDUCED_PROG_MEM``` and ```#define SFE_UBLOX_DISABLE_AUTO_NMEA``` in [SparkFun_u-blox_GNSS_Arduino_Library.h](https://github.com/sparkfun/SparkFun_u-blox_GNSS_Arduino_Library/blob/main/src/SparkFun_u-blox_GNSS_Arduino_Library.h#L59-L63).
+
 ## Contributing
 
 If you would like to contribute to this library: please do, we truly appreciate it, but please follow [these guidelines](./CONTRIBUTING.md). Thanks!
