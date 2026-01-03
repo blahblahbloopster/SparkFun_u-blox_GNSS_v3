@@ -228,7 +228,7 @@ For generation 6 and 7, please see [this example (deprecated)](https://github.co
 
 ## Memory Usage
 
-This library is heavy on both program memory and RAM. You are unlikely to be able to use it successfully on platforms with very limited memory, like the original Arduino Uno (ATmega328P). On other platforms with limited program memory, it may help to uncomment ```#define SFE_UBLOX_REDUCED_PROG_MEM``` and ```#define SFE_UBLOX_DISABLE_AUTO_NMEA``` in [SparkFun_u-blox_GNSS_Arduino_Library.h](https://github.com/sparkfun/SparkFun_u-blox_GNSS_Arduino_Library/blob/main/src/SparkFun_u-blox_GNSS_Arduino_Library.h#L59-L63).
+This library is heavy on both program memory and RAM. You are unlikely to be able to use it successfully on platforms with very limited memory, like the original Arduino Uno (ATmega328P). On other platforms with limited program memory, it may help to uncomment ```#define SFE_UBLOX_REDUCED_PROG_MEM``` etc. in [u-blox_GNSS.h](https://github.com/sparkfun/SparkFun_u-blox_GNSS_v3/blob/main/src/u-blox_GNSS.h#L53-L69).
 
 ## Contributing
 
