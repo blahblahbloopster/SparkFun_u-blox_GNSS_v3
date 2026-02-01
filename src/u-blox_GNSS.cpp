@@ -1593,7 +1593,7 @@ bool DevUBLOXGNSS::autoLookup(uint8_t Class, uint8_t ID, uint16_t *maxSize)
     }
     else if (ID == UBX_MGA_GPS_EPH)
     {
-        if (maxsize != nullptr)
+        if (maxSize != nullptr)
             *maxSize = UBX_MGA_GPS_EPH_LEN;
         return (packetUBXMGAGPSEPH != nullptr);
     }
@@ -6972,7 +6972,7 @@ size_t DevUBLOXGNSS::pushAssistNowDataInternal(size_t offset, bool skipTime, con
   return (bytesPushed); // Return the number of valid bytes successfully pushed
 }
 
-bool pushGPSEphAssistance(UBX_MGA_GPS_EPH_data_t* data, sfe_ublox_mga_assist_ack_e mgaAck = SFE_UBLOX_MGA_ASSIST_ACK_NO, uint16_t maxWait = defaultMGAdelay) {
+bool DevUBLOXGNSS::pushGPSEphAssistance(UBX_MGA_GPS_EPH_data_t* data, sfe_ublox_mga_assist_ack_e mgaAck, uint16_t maxWait) {
   if (packetUBXMGAGPSEPH == nullptr)
     initPacketUBXMGAGPSEPH();        // Check that RAM has been allocated for the UBX data
   if (packetUBXMGAGPSEPH == nullptr) // Bail if the RAM allocation failed
