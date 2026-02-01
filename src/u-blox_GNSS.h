@@ -310,7 +310,7 @@ public:
   // The units for alt (WGS84) and posAcc (stddev) are cm.
   bool setPositionAssistanceLLH(int32_t lat, int32_t lon, int32_t alt, uint32_t posAcc, sfe_ublox_mga_assist_ack_e mgaAck = SFE_UBLOX_MGA_ASSIST_ACK_NO, uint16_t maxWait = defaultMGAdelay);
 
-  bool pushGPSAssistance(UBX_MGA_GPS_t* data, sfe_ublox_mga_assist_ack_e mgaAck = SFE_UBLOX_MGA_ASSIST_ACK_NO, uint16_t maxWait = defaultMGAdelay);
+  bool pushGPSEphAssistance(UBX_MGA_GPS_EPH_t* data, sfe_ublox_mga_assist_ack_e mgaAck = SFE_UBLOX_MGA_ASSIST_ACK_NO, uint16_t maxWait = defaultMGAdelay);
 
   // Find the start of the AssistNow Offline (UBX_MGA_ANO) data for the chosen day
   // The daysIntoFture parameter makes it easy to get the data for (e.g.) tomorrow based on today's date
@@ -1441,7 +1441,7 @@ void logSECSIG(bool enabled = true);                                            
 
   UBX_MGA_ACK_DATA0_t *packetUBXMGAACK = nullptr; // Pointer to struct. RAM will be allocated for this if/when necessary
   UBX_MGA_DBD_t *packetUBXMGADBD = nullptr;       // Pointer to struct. RAM will be allocated for this if/when necessary
-  UBX_MGA_GPS_t *packetUBXGPS = nullptr;       // Pointer to struct. RAM will be allocated for this if/when necessary
+  UBX_MGA_GPS_EPH_t *packetUBXGPSEPH = nullptr;   // Pointer to struct. RAM will be allocated for this if/when necessary
 
 #ifndef SFE_UBLOX_DISABLE_AUTO_NMEA
   NMEA_GPGGA_t *storageNMEAGPGGA = nullptr; // Pointer to struct. RAM will be allocated for this if/when necessary

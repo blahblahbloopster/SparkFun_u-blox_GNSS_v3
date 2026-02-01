@@ -2703,7 +2703,7 @@ typedef struct
 } UBX_MGA_DBD_t;
 
 // UBX-MGA-GPS (0x13 0x00): GPS ephemeris assistance
-const uint16_t UBX_MGA_GPS_LEN = 68;
+const uint16_t UBX_MGA_GPS_EPH_LEN = 68;
 
 typedef struct
 {
@@ -2740,7 +2740,7 @@ typedef struct
   int32_t idot;
 
   uint8_t reserved2[2];
-} UBX_NAV_PVAT_data_t;
+} UBX_MGA_GPS_EPH_data_t;
 
 typedef struct
 {
@@ -2783,17 +2783,17 @@ typedef struct
       int32_t idot : 1;
     } bits;
   } moduleQueried2;
-} UBX_MGA_GPS_moduleQueried_t;
+} UBX_MGA_GPS_EPH_moduleQueried_t;
 
-// TODO: don't think this makes sense
 typedef struct
 {
+  // TODO: don't think this makes sense
   ubxAutomaticFlags automaticFlags;
-  UBX_MGA_GPS_data_t data;
-  UBX_MGA_GPS_moduleQueried_t moduleQueried;
-  void (*callbackPointerPtr)(UBX_MGA_GPS_data_t *);
-  UBX_MGA_GPS_data_t *callbackData;
-} UBX_MGA_GPS_t;
+  UBX_MGA_GPS_EPH_data_t data;
+  UBX_MGA_GPS_EPH_moduleQueried_t moduleQueried;
+  void (*callbackPointerPtr)(UBX_MGA_GPS_EPH_data_t *);
+  UBX_MGA_GPS_EPH_data_t *callbackData;
+} UBX_MGA_GPS_EPH_t;
 
 // HNR-specific structs
 
