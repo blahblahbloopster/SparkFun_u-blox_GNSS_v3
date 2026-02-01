@@ -310,7 +310,7 @@ public:
   // The units for alt (WGS84) and posAcc (stddev) are cm.
   bool setPositionAssistanceLLH(int32_t lat, int32_t lon, int32_t alt, uint32_t posAcc, sfe_ublox_mga_assist_ack_e mgaAck = SFE_UBLOX_MGA_ASSIST_ACK_NO, uint16_t maxWait = defaultMGAdelay);
 
-  bool pushGPSEphAssistance(UBX_MGA_GPS_EPH_t* data, sfe_ublox_mga_assist_ack_e mgaAck = SFE_UBLOX_MGA_ASSIST_ACK_NO, uint16_t maxWait = defaultMGAdelay);
+  bool pushGPSEphAssistance(UBX_MGA_GPS_EPH_data_t* data, sfe_ublox_mga_assist_ack_e mgaAck = SFE_UBLOX_MGA_ASSIST_ACK_NO, uint16_t maxWait = defaultMGAdelay);
 
   // Find the start of the AssistNow Offline (UBX_MGA_ANO) data for the chosen day
   // The daysIntoFture parameter makes it easy to get the data for (e.g.) tomorrow based on today's date
