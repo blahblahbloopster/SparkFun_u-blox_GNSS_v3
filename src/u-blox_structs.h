@@ -2702,6 +2702,99 @@ typedef struct
   UBX_MGA_DBD_data_t data[UBX_MGA_DBD_RINGBUFFER_LEN]; // Create a storage array for the MGA DBD packets
 } UBX_MGA_DBD_t;
 
+// UBX-MGA-GPS (0x13 0x00): GPS ephemeris assistance
+const uint16_t UBX_MGA_GPS_LEN = 68;
+
+typedef struct
+{
+  uint32_t iTOW;   // GPS time of week of the navigation epoch: ms
+  uint8_t version; // Message version (0x00 for this version)
+
+  uint8_t svId;
+  uint8_t reserved0;
+  uint8_t fitInterval;
+  uint8_t uraIndex;
+  uint8_t svHealth;
+  int8_t tgd;
+  uint16_t iodc;
+  uint16_t toc;
+  uint8_t reserved1;
+  int8_t af2;
+  int16_t af1;
+  int32_t af0;
+  int16_t crs;
+  int16_t deltaN;
+  int32_t m0;
+  int16_t cuc;
+  int16_t cus;
+  uint32_t e;
+  uint32_t sqrtA;
+  uint16_t toe;
+  int16_t cic;
+  int32_t omega0;
+  int16_t cis;
+  int16_t crc;
+  int32_t i0;
+  int32_t omega;
+  int32_t omegaDot;
+  int32_t idot;
+
+  uint8_t reserved2[2];
+} UBX_NAV_PVAT_data_t;
+
+typedef struct
+{
+  union
+  {
+    uint32_t all;
+    struct
+    {
+      uint32_t all : 1;
+
+      uint32_t iTOW : 1;
+
+      uint8_t svId : 1;
+      uint8_t reserved0 : 1;
+      uint8_t fitInterval : 1;
+      uint8_t uraIndex : 1;
+      uint8_t svHealth : 1;
+      int8_t tgd : 1;
+      uint16_t iodc : 1;
+      uint16_t toc : 1;
+      uint8_t reserved1 : 1;
+      int8_t af2 : 1;
+      int16_t af1 : 1;
+      int32_t af0 : 1;
+      int16_t crs : 1;
+      int16_t deltaN : 1;
+      int32_t m0 : 1;
+      int16_t cuc : 1;
+      int16_t cus : 1;
+      uint32_t e : 1;
+      uint32_t sqrtA : 1;
+      uint16_t toe : 1;
+      int16_t cic : 1;
+      int32_t omega0 : 1;
+      int16_t cis : 1;
+      int16_t crc : 1;
+      int32_t i0 : 1;
+      int32_t omega : 1;
+      int32_t omegaDot : 1;
+      int32_t idot : 1;
+    } bits;
+  } moduleQueried2;
+} UBX_MGA_GPS_moduleQueried_t;
+
+// TODO: don't think this makes sense
+typedef struct
+{
+  ubxAutomaticFlags automaticFlags;
+  UBX_MGA_GPS_data_t data;
+  UBX_MGA_GPS_moduleQueried_t moduleQueried;
+  void (*callbackPointerPtr)(UBX_MGA_GPS_data_t *);
+  UBX_MGA_GPS_data_t *callbackData;
+} UBX_MGA_GPS_t;
+
 // HNR-specific structs
 
 // UBX-HNR-PVT (0x28 0x00): High rate output of PVT solution
