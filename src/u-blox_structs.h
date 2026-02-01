@@ -2707,7 +2707,6 @@ const uint16_t UBX_MGA_GPS_EPH_LEN = 68;
 
 typedef struct
 {
-  uint32_t iTOW;   // GPS time of week of the navigation epoch: ms
   uint8_t version; // Message version (0x00 for this version)
 
   uint8_t svId;
@@ -2750,8 +2749,6 @@ typedef struct
     struct
     {
       uint32_t all : 1;
-
-      uint32_t iTOW : 1;
 
       uint8_t svId : 1;
       uint8_t reserved0 : 1;

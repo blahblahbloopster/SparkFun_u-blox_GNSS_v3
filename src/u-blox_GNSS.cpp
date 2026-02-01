@@ -50,6 +50,8 @@
 
 #include <Arduino.h>
 #include "u-blox_GNSS.h"
+#include "u-blox_Class_and_ID.h"
+#include "u-blox_structs.h"
 
 DevUBLOXGNSS::DevUBLOXGNSS(void)
 {
@@ -516,6 +518,12 @@ void DevUBLOXGNSS::end(void)
   {
     delete packetUBXMGADBD;
     packetUBXMGADBD = nullptr;
+  }
+
+  if (packetUBXMGAGPSEPH != nullptr)
+  {
+    delete packetUBXMGAGPSEPH;
+    packetUBXMGAGPSEPH = nullptr;
   }
 
 #ifndef SFE_UBLOX_DISABLE_HNR
@@ -1582,6 +1590,12 @@ bool DevUBLOXGNSS::autoLookup(uint8_t Class, uint8_t ID, uint16_t *maxSize)
       if (maxSize != nullptr)
         *maxSize = UBX_MGA_DBD_LEN;
       return (packetUBXMGADBD != nullptr);
+    }
+    else if (ID == UBX_MGA_GPS_EPH)
+    {
+        if (maxsize != nullptr)
+            *maxSize = UBX_MGA_GPS_EPH_LEN;
+        return (packetUBXMGAGPSEPH != nullptr);
     }
     break;
   case UBX_CLASS_HNR:
@@ -4938,6 +4952,29 @@ void DevUBLOXGNSS::processUBXpacket(ubxPacket *msg)
         }
       }
     }
+    /*
+    else if (msg->id == UBX_MGA_GPS_EPH && msg->len == UBX_MGA_GPS_EPH_LEN)
+    {
+        if (packetUBXMGAGPSEPH != nullptr)
+        {
+            uint8_t type = extractByte(msg, 0);
+            uint8_t version = extractByte(msg, 1);
+            if (type == 0x01 && version == 0x00) {
+                packetUBXMGAGPSEPH->data.svId = extractByte(msg, 2);
+                packetUBXMGAGPSEPH->data.fitInterval = extractByte(msg, 4);
+                packetUBXMGAGPSEPH->data.uraIndex = extractByte(msg, 5);
+                packetUBXMGAGPSEPH->data.svHealth = extractByte(msg, 6);
+                packetUBXMGAGPSEPH->data.tgd = extractByte(msg, 7);
+                // AAAAAAAAAAAAAAAA
+                packetUBXMGAGPSEPH->data.iodc = extractSignedBits(msg, 8);
+                packetUBXMGAGPSEPH->data.uraIndex = extractByte(msg, 5);
+                packetUBXMGAGPSEPH->data.uraIndex = extractByte(msg, 5);
+                packetUBXMGAGPSEPH->data.uraIndex = extractByte(msg, 5);
+                packetUBXMGAGPSEPH->data.uraIndex = extractByte(msg, 5);
+            }
+        }
+    }
+    */
     break;
 #ifndef SFE_UBLOX_DISABLE_HNR
   case UBX_CLASS_HNR:
@@ -6935,6 +6972,111 @@ size_t DevUBLOXGNSS::pushAssistNowDataInternal(size_t offset, bool skipTime, con
   return (bytesPushed); // Return the number of valid bytes successfully pushed
 }
 
+bool pushGPSEphAssistance(UBX_MGA_GPS_EPH_data_t* data, sfe_ublox_mga_assist_ack_e mgaAck = SFE_UBLOX_MGA_ASSIST_ACK_NO, uint16_t maxWait = defaultMGAdelay) {
+  if (packetUBXMGAGPSEPH == nullptr)
+    initPacketUBXMGAGPSEPH();        // Check that RAM has been allocated for the UBX data
+  if (packetUBXMGAGPSEPH == nullptr) // Bail if the RAM allocation failed
+    return (false);
+  packetCfg.cls = UBX_CLASS_MGA;
+  packetCfg.id = UBX_MGA_GPS_EPH;
+  packetCfg.len = UBX_MGA_GPS_EPH_LEN;
+  packetCfg.startingSpot = 0;
+
+  payloadCfg[0] = 0x01;  // type
+  payloadCfg[1] = 0x00;  // version
+  payloadCfg[2] = data->svId;
+  payloadCfg[3] = 0x00;  // reserved
+  payloadCfg[4] = data->fitInterval;
+  payloadCfg[5] = data->uraIndex;
+  payloadCfg[6] = data->svHealth;
+  payloadCfg[7] = data->tgd;
+  payloadCfg[8] = data->iodc & 0xff;
+  payloadCfg[9] = data->iodc >> 8;
+
+  payloadCfg[10] = data->toc & 0xff;
+  payloadCfg[11] = data->toc >> 8;
+
+  payloadCfg[12] = 0x00;  // reserved
+
+  payloadCfg[13] = data->af2;
+
+  payloadCfg[14] = data->af1;
+  payloadCfg[15] = data->af1 >> 8;
+
+  payloadCfg[19] = data->af2;
+  payloadCfg[18] = data->af2 >> 8;
+  payloadCfg[17] = data->af2 >> 16;
+  payloadCfg[16] = data->af2 >> 24;
+
+  payloadCfg[20] = data->crs;
+  payloadCfg[21] = data->crs >> 8;
+
+  payloadCfg[22] = data->deltaN;
+  payloadCfg[23] = data->deltaN >> 8;
+
+  payloadCfg[24] = data->m0;
+  payloadCfg[25] = data->m0 >> 8;
+  payloadCfg[26] = data->m0 >> 16;
+  payloadCfg[27] = data->m0 >> 24;
+
+  payloadCfg[28] = data->cuc;
+  payloadCfg[29] = data->cuc >> 8;
+
+  payloadCfg[30] = data->cus;
+  payloadCfg[31] = data->cus >> 8;
+
+  payloadCfg[32] = data->e;
+  payloadCfg[33] = data->e >> 8;
+  payloadCfg[34] = data->e >> 16;
+  payloadCfg[35] = data->e >> 24;
+
+  payloadCfg[36] = data->sqrtA;
+  payloadCfg[37] = data->sqrtA >> 8;
+  payloadCfg[38] = data->sqrtA >> 16;
+  payloadCfg[39] = data->sqrtA >> 24;
+
+  payloadCfg[40] = data->toe;
+  payloadCfg[41] = data->toe >> 8;
+
+  payloadCfg[42] = data->cic;
+  payloadCfg[43] = data->cic >> 8;
+
+  payloadCfg[44] = data->omega0;
+  payloadCfg[45] = data->omega0 >> 8;
+  payloadCfg[46] = data->omega0 >> 16;
+  payloadCfg[47] = data->omega0 >> 24;
+
+  payloadCfg[48] = data->cis;
+  payloadCfg[49] = data->cis >> 8;
+
+  payloadCfg[50] = data->crc;
+  payloadCfg[51] = data->crc >> 8;
+
+  payloadCfg[52] = data->i0;
+  payloadCfg[53] = data->i0 >> 8;
+  payloadCfg[54] = data->i0 >> 16;
+  payloadCfg[55] = data->i0 >> 24;
+
+  payloadCfg[56] = data->omega;
+  payloadCfg[57] = data->omega >> 8;
+  payloadCfg[58] = data->omega >> 16;
+  payloadCfg[59] = data->omega >> 24;
+
+  payloadCfg[60] = data->omegaDot;
+  payloadCfg[61] = data->omegaDot >> 8;
+  payloadCfg[62] = data->omegaDot >> 16;
+  payloadCfg[63] = data->omegaDot >> 24;
+
+  payloadCfg[64] = data->idot;
+  payloadCfg[65] = data->idot >> 8;
+
+  payloadCfg[66] = 0x00;
+  payloadCfg[67] = 0x00;
+
+
+  return (sendCommand(&packetCfg, 0) == SFE_UBLOX_STATUS_SUCCESS); // don't think this one ACKs
+}
+
 // PRIVATE: Allocate RAM for packetUBXMGAACK and initialize it
 bool DevUBLOXGNSS::initPacketUBXMGAACK()
 {
@@ -6949,6 +7091,21 @@ bool DevUBLOXGNSS::initPacketUBXMGAACK()
   }
   packetUBXMGAACK->head = 0; // Initialize the ring buffer pointers
   packetUBXMGAACK->tail = 0;
+  return (true);
+}
+
+// PRIVATE: Allocate RAM for packetUBXMGAGPSEPH and initialize it
+bool DevUBLOXGNSS::initPacketUBXMGAGPSEPH()
+{
+  packetUBXMGAGPSEPH = new UBX_MGA_GPS_EPH_t; // Allocate RAM for the main struct
+  if (packetUBXMGAGPSEPH == nullptr)
+  {
+#ifndef SFE_UBLOX_REDUCED_PROG_MEM
+    if ((_printDebug == true) || (_printLimitedDebug == true)) // This is important. Print this if doing limited debugging
+      _debugSerial.println(F("initPacketUBXMGAGPSEPH: RAM alloc failed!"));
+#endif
+    return (false);
+  }
   return (true);
 }
 

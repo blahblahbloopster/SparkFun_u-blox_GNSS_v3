@@ -1441,7 +1441,7 @@ void logSECSIG(bool enabled = true);                                            
 
   UBX_MGA_ACK_DATA0_t *packetUBXMGAACK = nullptr; // Pointer to struct. RAM will be allocated for this if/when necessary
   UBX_MGA_DBD_t *packetUBXMGADBD = nullptr;       // Pointer to struct. RAM will be allocated for this if/when necessary
-  UBX_MGA_GPS_EPH_t *packetUBXGPSEPH = nullptr;   // Pointer to struct. RAM will be allocated for this if/when necessary
+  UBX_MGA_GPS_EPH_t *packetUBXMGAGPSEPH = nullptr;// Pointer to struct. RAM will be allocated for this if/when necessary
 
 #ifndef SFE_UBLOX_DISABLE_AUTO_NMEA
   NMEA_GPGGA_t *storageNMEAGPGGA = nullptr; // Pointer to struct. RAM will be allocated for this if/when necessary
@@ -1552,6 +1552,7 @@ protected:
   bool initPacketUBXSECSIG();           // Allocate RAM for packetUBXSECSIG and initialize it
   bool initPacketUBXMGAACK();           // Allocate RAM for packetUBXMGAACK and initialize it
   bool initPacketUBXMGADBD();           // Allocate RAM for packetUBXMGADBD and initialize it
+  bool initPacketUBXMGAGPSEPH();        // Allocate RAM for packetUBXMGADBD and initialize it
 
   bool initStorageNMEAGPGGA(); // Allocate RAM for incoming NMEA GPGGA messages and initialize it
   bool initStorageNMEAGNGGA(); // Allocate RAM for incoming NMEA GNGGA messages and initialize it
