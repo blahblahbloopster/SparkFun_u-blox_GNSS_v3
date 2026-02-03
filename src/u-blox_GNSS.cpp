@@ -6982,99 +6982,115 @@ bool DevUBLOXGNSS::pushGPSEphAssistance(UBX_MGA_GPS_EPH_data_t* data, sfe_ublox_
   packetCfg.len = UBX_MGA_GPS_EPH_LEN;
   packetCfg.startingSpot = 0;
 
-  payloadCfg[0] = 0x01;  // type
-  payloadCfg[1] = 0x00;  // version
-  payloadCfg[2] = data->svId;
-  payloadCfg[3] = 0x00;  // reserved
-  payloadCfg[4] = data->fitInterval;
-  payloadCfg[5] = data->uraIndex;
-  payloadCfg[6] = data->svHealth;
-  payloadCfg[7] = data->tgd;
-  payloadCfg[8] = data->iodc & 0xff;
-  payloadCfg[9] = data->iodc >> 8;
+  uint8_t pkt[76] = { 0 };
 
-  payloadCfg[10] = data->toc & 0xff;
-  payloadCfg[11] = data->toc >> 8;
-
-  payloadCfg[12] = 0x00;  // reserved
-
-  payloadCfg[13] = data->af2;
-
-  payloadCfg[14] = data->af1;
-  payloadCfg[15] = data->af1 >> 8;
-
-  payloadCfg[19] = data->af2;
-  payloadCfg[18] = data->af2 >> 8;
-  payloadCfg[17] = data->af2 >> 16;
-  payloadCfg[16] = data->af2 >> 24;
-
-  payloadCfg[20] = data->crs;
-  payloadCfg[21] = data->crs >> 8;
-
-  payloadCfg[22] = data->deltaN;
-  payloadCfg[23] = data->deltaN >> 8;
-
-  payloadCfg[24] = data->m0;
-  payloadCfg[25] = data->m0 >> 8;
-  payloadCfg[26] = data->m0 >> 16;
-  payloadCfg[27] = data->m0 >> 24;
-
-  payloadCfg[28] = data->cuc;
-  payloadCfg[29] = data->cuc >> 8;
-
-  payloadCfg[30] = data->cus;
-  payloadCfg[31] = data->cus >> 8;
-
-  payloadCfg[32] = data->e;
-  payloadCfg[33] = data->e >> 8;
-  payloadCfg[34] = data->e >> 16;
-  payloadCfg[35] = data->e >> 24;
-
-  payloadCfg[36] = data->sqrtA;
-  payloadCfg[37] = data->sqrtA >> 8;
-  payloadCfg[38] = data->sqrtA >> 16;
-  payloadCfg[39] = data->sqrtA >> 24;
-
-  payloadCfg[40] = data->toe;
-  payloadCfg[41] = data->toe >> 8;
-
-  payloadCfg[42] = data->cic;
-  payloadCfg[43] = data->cic >> 8;
-
-  payloadCfg[44] = data->omega0;
-  payloadCfg[45] = data->omega0 >> 8;
-  payloadCfg[46] = data->omega0 >> 16;
-  payloadCfg[47] = data->omega0 >> 24;
-
-  payloadCfg[48] = data->cis;
-  payloadCfg[49] = data->cis >> 8;
-
-  payloadCfg[50] = data->crc;
-  payloadCfg[51] = data->crc >> 8;
-
-  payloadCfg[52] = data->i0;
-  payloadCfg[53] = data->i0 >> 8;
-  payloadCfg[54] = data->i0 >> 16;
-  payloadCfg[55] = data->i0 >> 24;
-
-  payloadCfg[56] = data->omega;
-  payloadCfg[57] = data->omega >> 8;
-  payloadCfg[58] = data->omega >> 16;
-  payloadCfg[59] = data->omega >> 24;
-
-  payloadCfg[60] = data->omegaDot;
-  payloadCfg[61] = data->omegaDot >> 8;
-  payloadCfg[62] = data->omegaDot >> 16;
-  payloadCfg[63] = data->omegaDot >> 24;
-
-  payloadCfg[64] = data->idot;
-  payloadCfg[65] = data->idot >> 8;
-
-  payloadCfg[66] = 0x00;
-  payloadCfg[67] = 0x00;
+  pkt[0] = UBX_SYNCH_1;              // Sync char 1
+  pkt[1] = UBX_SYNCH_2;              // Sync char 2
+  pkt[2] = UBX_CLASS_MGA;            // Class
+  pkt[3] = UBX_MGA_GPS_EPH;          // ID
+  pkt[4] = 68;                       // Length LSB
+  pkt[5] = 0x00;                     // Length MSB
 
 
-  return (sendCommand(&packetCfg, 0) == SFE_UBLOX_STATUS_SUCCESS); // don't think this one ACKs
+  pkt[6 + 0] = 0x01;  // type
+  pkt[6 + 1] = 0x00;  // version
+  pkt[6 + 2] = data->svId;
+  pkt[6 + 3] = 0x00;  // reserved
+  pkt[6 + 4] = data->fitInterval;
+  pkt[6 + 5] = data->uraIndex;
+  pkt[6 + 6] = data->svHealth;
+  pkt[6 + 7] = data->tgd;
+  pkt[6 + 8] = data->iodc & 0xff;
+  pkt[6 + 9] = data->iodc >> 8;
+
+  pkt[6 + 10] = data->toc & 0xff;
+  pkt[6 + 11] = data->toc >> 8;
+
+  pkt[6 + 12] = 0x00;  // reserved
+
+  pkt[6 + 13] = data->af2;
+
+  pkt[6 + 14] = data->af1;
+  pkt[6 + 15] = data->af1 >> 8;
+
+  pkt[6 + 19] = data->af2;
+  pkt[6 + 18] = data->af2 >> 8;
+  pkt[6 + 17] = data->af2 >> 16;
+  pkt[6 + 16] = data->af2 >> 24;
+
+  pkt[6 + 20] = data->crs;
+  pkt[6 + 21] = data->crs >> 8;
+
+  pkt[6 + 22] = data->deltaN;
+  pkt[6 + 23] = data->deltaN >> 8;
+
+  pkt[6 + 24] = data->m0;
+  pkt[6 + 25] = data->m0 >> 8;
+  pkt[6 + 26] = data->m0 >> 16;
+  pkt[6 + 27] = data->m0 >> 24;
+
+  pkt[6 + 28] = data->cuc;
+  pkt[6 + 29] = data->cuc >> 8;
+
+  pkt[6 + 30] = data->cus;
+  pkt[6 + 31] = data->cus >> 8;
+
+  pkt[6 + 32] = data->e;
+  pkt[6 + 33] = data->e >> 8;
+  pkt[6 + 34] = data->e >> 16;
+  pkt[6 + 35] = data->e >> 24;
+
+  pkt[6 + 36] = data->sqrtA;
+  pkt[6 + 37] = data->sqrtA >> 8;
+  pkt[6 + 38] = data->sqrtA >> 16;
+  pkt[6 + 39] = data->sqrtA >> 24;
+
+  pkt[6 + 40] = data->toe;
+  pkt[6 + 41] = data->toe >> 8;
+
+  pkt[6 + 42] = data->cic;
+  pkt[6 + 43] = data->cic >> 8;
+
+  pkt[6 + 44] = data->omega0;
+  pkt[6 + 45] = data->omega0 >> 8;
+  pkt[6 + 46] = data->omega0 >> 16;
+  pkt[6 + 47] = data->omega0 >> 24;
+
+  pkt[6 + 48] = data->cis;
+  pkt[6 + 49] = data->cis >> 8;
+
+  pkt[6 + 50] = data->crc;
+  pkt[6 + 51] = data->crc >> 8;
+
+  pkt[6 + 52] = data->i0;
+  pkt[6 + 53] = data->i0 >> 8;
+  pkt[6 + 54] = data->i0 >> 16;
+  pkt[6 + 55] = data->i0 >> 24;
+
+  pkt[6 + 56] = data->omega;
+  pkt[6 + 57] = data->omega >> 8;
+  pkt[6 + 58] = data->omega >> 16;
+  pkt[6 + 59] = data->omega >> 24;
+
+  pkt[6 + 60] = data->omegaDot;
+  pkt[6 + 61] = data->omegaDot >> 8;
+  pkt[6 + 62] = data->omegaDot >> 16;
+  pkt[6 + 63] = data->omegaDot >> 24;
+
+  pkt[6 + 64] = data->idot;
+  pkt[6 + 65] = data->idot >> 8;
+
+  pkt[6 + 66] = 0x00;
+  pkt[6 + 67] = 0x00;
+
+  // checksum
+  for (uint8_t i = 2; i < 74; i++) {
+    pkt[74] += pkt[i];
+    pkt[75] += pkt[74];
+  }
+
+  // Return true if the one packet was pushed successfully
+  return (pushAssistNowDataInternal(0, false, pkt, 76, mgaAck, maxWait) == 76);
 }
 
 // PRIVATE: Allocate RAM for packetUBXMGAACK and initialize it
