@@ -7001,84 +7001,84 @@ bool DevUBLOXGNSS::pushGPSEphAssistance(UBX_MGA_GPS_EPH_data_t* data, sfe_ublox_
   pkt[6 + 6] = data->svHealth;
   pkt[6 + 7] = data->tgd;
   pkt[6 + 8] = data->iodc & 0xff;
-  pkt[6 + 9] = data->iodc >> 8;
+  pkt[6 + 9] = (data->iodc >> 8) & 0xff;
 
   pkt[6 + 10] = data->toc & 0xff;
-  pkt[6 + 11] = data->toc >> 8;
+  pkt[6 + 11] = (data->toc >> 8) & 0xff;
 
   pkt[6 + 12] = 0x00;  // reserved
 
   pkt[6 + 13] = data->af2;
 
-  pkt[6 + 14] = data->af1;
-  pkt[6 + 15] = data->af1 >> 8;
+  pkt[6 + 14] = data->af1 & 0xff;
+  pkt[6 + 15] = (data->af1 >> 8) & 0xff;
 
-  pkt[6 + 19] = data->af2;
-  pkt[6 + 18] = data->af2 >> 8;
-  pkt[6 + 17] = data->af2 >> 16;
-  pkt[6 + 16] = data->af2 >> 24;
+  pkt[6 + 19] = data->af2 & 0xff;
+  pkt[6 + 18] = (data->af2 >> 8) & 0xff;
+  pkt[6 + 17] = (data->af2 >> 16) & 0xff;
+  pkt[6 + 16] = (data->af2 >> 24) & 0xff;
 
-  pkt[6 + 20] = data->crs;
-  pkt[6 + 21] = data->crs >> 8;
+  pkt[6 + 20] = data->crs & 0xff;
+  pkt[6 + 21] = (data->crs >> 8) & 0xff;
 
-  pkt[6 + 22] = data->deltaN;
-  pkt[6 + 23] = data->deltaN >> 8;
+  pkt[6 + 22] = data->deltaN & 0xff;
+  pkt[6 + 23] = (data->deltaN >> 8) & 0xff;
 
-  pkt[6 + 24] = data->m0;
-  pkt[6 + 25] = data->m0 >> 8;
-  pkt[6 + 26] = data->m0 >> 16;
-  pkt[6 + 27] = data->m0 >> 24;
+  pkt[6 + 24] = data->m0 & 0xff;
+  pkt[6 + 25] = (data->m0 >> 8) & 0xff;
+  pkt[6 + 26] = (data->m0 >> 16) & 0xff;
+  pkt[6 + 27] = (data->m0 >> 24) & 0xff;
 
-  pkt[6 + 28] = data->cuc;
-  pkt[6 + 29] = data->cuc >> 8;
+  pkt[6 + 28] = data->cuc & 0xff;
+  pkt[6 + 29] = (data->cuc >> 8) & 0xff;
 
-  pkt[6 + 30] = data->cus;
-  pkt[6 + 31] = data->cus >> 8;
+  pkt[6 + 30] = data->cus & 0xff;
+  pkt[6 + 31] = (data->cus >> 8) & 0xff;
 
-  pkt[6 + 32] = data->e;
-  pkt[6 + 33] = data->e >> 8;
-  pkt[6 + 34] = data->e >> 16;
-  pkt[6 + 35] = data->e >> 24;
+  pkt[6 + 32] = data->e & 0xff;
+  pkt[6 + 33] = (data->e >> 8) & 0xff;
+  pkt[6 + 34] = (data->e >> 16) & 0xff;
+  pkt[6 + 35] = (data->e >> 24) & 0xff;
 
-  pkt[6 + 36] = data->sqrtA;
-  pkt[6 + 37] = data->sqrtA >> 8;
-  pkt[6 + 38] = data->sqrtA >> 16;
-  pkt[6 + 39] = data->sqrtA >> 24;
+  pkt[6 + 36] = data->sqrtA & 0xff;
+  pkt[6 + 37] = (data->sqrtA >> 8) & 0xff;
+  pkt[6 + 38] = (data->sqrtA >> 16) & 0xff;
+  pkt[6 + 39] = (data->sqrtA >> 24) & 0xff;
 
-  pkt[6 + 40] = data->toe;
-  pkt[6 + 41] = data->toe >> 8;
+  pkt[6 + 40] = data->toe & 0xff;
+  pkt[6 + 41] = (data->toe >> 8) & 0xff;
 
-  pkt[6 + 42] = data->cic;
-  pkt[6 + 43] = data->cic >> 8;
+  pkt[6 + 42] = data->cic & 0xff;
+  pkt[6 + 43] = (data->cic >> 8) & 0xff;
 
-  pkt[6 + 44] = data->omega0;
-  pkt[6 + 45] = data->omega0 >> 8;
-  pkt[6 + 46] = data->omega0 >> 16;
-  pkt[6 + 47] = data->omega0 >> 24;
+  pkt[6 + 44] = data->omega0 & 0xff;
+  pkt[6 + 45] = (data->omega0 >> 8) & 0xff;
+  pkt[6 + 46] = (data->omega0 >> 16) & 0xff;
+  pkt[6 + 47] = (data->omega0 >> 24) & 0xff;
 
-  pkt[6 + 48] = data->cis;
-  pkt[6 + 49] = data->cis >> 8;
+  pkt[6 + 48] = data->cis & 0xff;
+  pkt[6 + 49] = (data->cis >> 8) & 0xff;
 
-  pkt[6 + 50] = data->crc;
-  pkt[6 + 51] = data->crc >> 8;
+  pkt[6 + 50] = data->crc & 0xff;
+  pkt[6 + 51] = (data->crc >> 8) & 0xff;
 
-  pkt[6 + 52] = data->i0;
-  pkt[6 + 53] = data->i0 >> 8;
-  pkt[6 + 54] = data->i0 >> 16;
-  pkt[6 + 55] = data->i0 >> 24;
+  pkt[6 + 52] = data->i0 & 0xff;
+  pkt[6 + 53] = (data->i0 >> 8) & 0xff;
+  pkt[6 + 54] = (data->i0 >> 16) & 0xff;
+  pkt[6 + 55] = (data->i0 >> 24) & 0xff;
 
-  pkt[6 + 56] = data->omega;
-  pkt[6 + 57] = data->omega >> 8;
-  pkt[6 + 58] = data->omega >> 16;
-  pkt[6 + 59] = data->omega >> 24;
+  pkt[6 + 56] = data->omega & 0xff;
+  pkt[6 + 57] = (data->omega >> 8) & 0xff;
+  pkt[6 + 58] = (data->omega >> 16) & 0xff;
+  pkt[6 + 59] = (data->omega >> 24) & 0xff;
 
-  pkt[6 + 60] = data->omegaDot;
-  pkt[6 + 61] = data->omegaDot >> 8;
-  pkt[6 + 62] = data->omegaDot >> 16;
-  pkt[6 + 63] = data->omegaDot >> 24;
+  pkt[6 + 60] = data->omegaDot & 0xff;
+  pkt[6 + 61] = (data->omegaDot >> 8) & 0xff;
+  pkt[6 + 62] = (data->omegaDot >> 16) & 0xff;
+  pkt[6 + 63] = (data->omegaDot >> 24) & 0xff;
 
-  pkt[6 + 64] = data->idot;
-  pkt[6 + 65] = data->idot >> 8;
+  pkt[6 + 64] = data->idot & 0xff;
+  pkt[6 + 65] = (data->idot >> 8) & 0xff;
 
   pkt[6 + 66] = 0x00;
   pkt[6 + 67] = 0x00;
